@@ -27,13 +27,13 @@
                 android:textSize="20sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="P.I.M.P" />
+                android:text="@string/song_name" />
 
             <TextView
                 android:id="@+id/Artist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="50 cent" />
+                android:text="@string/artist" />
 
         </LinearLayout>
 
