@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -18,12 +19,19 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongHolder> {
 
     ArrayList<SongInfo> songs;
     Context context;
-
+    OnitemClickListener onItemClickListener;
     SongAdapter(Context context,ArrayList<SongInfo> songs){
         this.context=context;
         this.songs=songs;
  }
 
+ public interface OnitemClickListener{
+        void onItemClick(Button b,View v,SongInfo obj, int position);
+    }
+
+    public  void  setOnItemClickListener(OnitemClickListener onItemClickListener){
+        this.onItemClickListener=onItemClickListener;
+    }
     @NonNull
     @Override
     public SongHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -32,7 +40,19 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SongHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final SongHolder holder, final int position) {
+
+     final SongInfo c=songs.get(position);
+    holder.SongName.setText(c.songname);
+        holder.Artist.setText(c.artistName);
+        holder.play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(onItemClickListener!=null){
+                    onItemClickListener.onItemClick(holder.play,v,c,position);
+                }
+            }
+        });
 
     }
 
