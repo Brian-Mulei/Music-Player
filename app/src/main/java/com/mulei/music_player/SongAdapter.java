@@ -69,7 +69,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongHolder> {
 
             SongName=itemView.findViewById(R.id.SongName);
             Artist=itemView.findViewById(R.id.Artist);
-            play=itemView.findViewById(R.id.playbtn);
+            play=itemView.findViewById(R.id.button);
 
         }
     }
