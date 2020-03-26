@@ -9,8 +9,8 @@ tools:context=".MainActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView2"
-        android:layout_width="411dp"
-        android:layout_height="647dp"
+        android:layout_width="412dp"
+        android:layout_height="578dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.523"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,13 +18,15 @@ tools:context=".MainActivity">
 
     <SeekBar
         android:id="@+id/seekBar4"
-        style="@style/Widget.AppCompat.SeekBar.Discrete"
         android:layout_width="340dp"
         android:layout_height="56dp"
         android:max="10"
+        android:paddingStart="30dip"
         android:progress="3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recyclerView2" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

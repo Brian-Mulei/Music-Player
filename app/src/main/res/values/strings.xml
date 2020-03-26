@@ -2,5 +2,6 @@
     <string name="app_name">Music-Player</string>
     <string name="song_name">P.I.M.P</string>
     <string name="artist">50 Cent</string>
+    <string name="button">PLAY</string>
 
 </resources>

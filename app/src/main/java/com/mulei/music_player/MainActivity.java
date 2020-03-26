@@ -14,7 +14,10 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -35,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        final Handler handler=new Handler();
         recyclerView= findViewById(R.id.recyclerView2);
         seekbar=findViewById(R.id.seekBar4);
         //SongInfo s =new SongInfo("P.I.M.P", "50 CENT");
@@ -49,34 +53,76 @@ public class MainActivity extends AppCompatActivity {
 
         songAdapter.setOnItemClickListener(new SongAdapter.OnitemClickListener() {
             @Override
-            public void onItemClick(final Button b, View v, SongInfo obj, int position) {
-                try {
-                    if(b.getText().toString().equals("Stop")){
-                        b.setText("PLAY");
-                        mediaPlayer.stop();
-                        mediaPlayer.reset();
-                        mediaPlayer.release();
-                        mediaPlayer=null;
-                    }else {
+            public void onItemClick(final Button b, View v, final SongInfo obj, int position) {
 
-                        mediaPlayer = new MediaPlayer();
-                        mediaPlayer.setDataSource(obj.getSongUrl());
-                        mediaPlayer.prepareAsync();
-                        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                            @Override
-                            public void onPrepared(MediaPlayer mp) {
-                                mp.start();
-                                b.setText("Stop");
-                            }
-                        });
-                    }
-                }catch (IOException e){}
+               Runnable runnable=new Runnable() {
+                   @Override
+                   public void run() {
+                       try {
+                           if(b.getText().toString().equals("Stop")){
+                               b.setText("PLAY");
+                               mediaPlayer.stop();
+                               mediaPlayer.reset();
+                               mediaPlayer.release();
+                               mediaPlayer=null;
+                           }else {
+
+                               mediaPlayer = new MediaPlayer();
+                               mediaPlayer.setDataSource(obj.getSongUrl());
+                               mediaPlayer.prepareAsync();
+                               mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                                   @Override
+                                   public void onPrepared(MediaPlayer mp) {
+                                       mp.start();
+                                       seekbar.setProgress(0);
+                                       seekbar.setMax(mp.getDuration());
+                                       Log.d("Prog", "run: " + mediaPlayer.getDuration());
+
+
+                                   }
+                               });
+                               b.setText("Stop");
+                           }
+                       }catch (IOException e){}
+                   }
+               };
+               handler.postDelayed(runnable,1000);
             }
         });
 
 
-    
+
     CheckPermission();
+        Thread t = new runThread();
+        t.start();
+    }
+
+    public class runThread extends Thread  {
+
+
+        @Override
+        public void run() {
+            while (true) {
+
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Log.d("Runwa", "run: " + 1);
+                if (mediaPlayer != null) {
+                    seekbar.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            seekbar.setProgress(mediaPlayer.getCurrentPosition());
+                        }
+                    });
+
+                    Log.d("Runwa", "run: " + mediaPlayer.getCurrentPosition());
+                }
+            }
+        }
+
     }
 
     private void CheckPermission() {
